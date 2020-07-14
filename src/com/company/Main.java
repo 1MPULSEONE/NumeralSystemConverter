@@ -6,8 +6,18 @@ public class Main {
 
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
-        int numDecimal = scanner.nextInt();
-        int numOctopus = numDecimal % 8;
-        System.out.println(numOctopus);
+        long num = scanner.nextLong();
+        int destinationRadix = scanner.nextInt();
+        switch (destinationRadix) {
+            case 2:
+                System.out.printf("0b%s",Long.toBinaryString(num));
+                break;
+            case 8:
+                System.out.printf("0%s",Long.toOctalString(num));
+                break;
+            case 16:
+                System.out.printf("0x%s",Long.toHexString(num));
+                break;
+        }
     }
 }
