@@ -1,10 +1,13 @@
 package com.company;
 
+import java.util.Scanner;
+
 public class Main {
 
     public static void main(String[] args) {
-        int numDecimal = 20;
-        String bin = Integer.toBinaryString(numDecimal);
-        System.out.printf("%d is equal to 0b%s",2,bin);
+        Scanner scanner = new Scanner(System.in);
+        int numDecimal = scanner.nextInt();
+        int numOctopus = numDecimal % 8;
+        System.out.println(numOctopus);
     }
 }
