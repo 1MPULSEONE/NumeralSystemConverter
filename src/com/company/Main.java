@@ -2,33 +2,71 @@ package com.company;
 
 import java.util.Scanner;
 
+class Num {
+    long intPart;
+    double fracPart;
+    String intString;
+    String fracString;
+    boolean isToOne;
+    boolean isWithFrac;
+}
+
 public class Main {
-    private static long length;
     public static void main(String[] args) {
-        Scanner scanner = new Scanner(System.in);
-        int sourceRadix = scanner.nextInt();
-        String sourceNumber = scanner.next();
-        int targetRadix = scanner.nextInt();
-        int targetNumber = Integer.parseInt(sourceNumber);
-        if (sourceRadix == 1) {
-            length = sourceNumber.length();
-            targetNumber = 0;
-            for (long i = 0; i < length; i++) {
-                targetNumber++;
-            }
+        Scanner sc = new Scanner(System.in);
+        int radixOfNum = sc.nextInt();
+        String numInString = sc.next();
+        int radixTarget = sc.nextInt();
+
+        int roundUpFive = 5;
+        Num num = new Num();
+
+        if (numInString.contains(".")) {
+            num.isWithFrac = true;
+            int point = numInString.indexOf(".");
+            num.intString = numInString.substring(0, point);
+            num.fracString = numInString.substring(point + 1);
         } else {
-            length = Long.parseLong(sourceNumber);
+            num.intString = numInString;
         }
-        if (sourceRadix != 10 && sourceRadix != 1) {
-            targetNumber = Integer.parseInt(sourceNumber,sourceRadix);
+
+        if (radixOfNum == 1) {
+            num.intPart = num.intString.length();
+        } else {
+            num.intPart = Long.parseLong(num.intString, radixOfNum);
         }
-        if (targetRadix == 1) {
-            for (long i = 0; i < length; i++) {
+
+        if (radixTarget == 1) {
+            num.isToOne = true;
+            for (int i = 0; i < num.intPart; i++) {
                 System.out.print(1);
             }
         } else {
-            sourceNumber = Integer.toString(targetNumber,targetRadix);
-            System.out.println(sourceNumber);
+            String intTarget = Long.toString(num.intPart, radixTarget);
+            System.out.print(intTarget);
+        }
+
+        if (!num.isToOne && num.isWithFrac) {
+            char[] digits = num.fracString.toCharArray();
+            StringBuilder fracTarget = new StringBuilder();
+            fracTarget.append(".");
+
+            for (int i = 0; i < digits.length; i++) {
+                double partOfFrac =
+                        Character.digit(digits[i], radixOfNum)
+                                / Math.pow(radixOfNum, i + 1);
+                num.fracPart += partOfFrac;
+            }
+
+            for (int i = 0; i < roundUpFive; i++) {
+                double fracToTargetRadix = num.fracPart * radixTarget;
+                long intPartOfFrac = (long) fracToTargetRadix;
+                String intPartOfFracStr = Long.toString(intPartOfFrac, radixTarget);
+                num.fracPart = fracToTargetRadix - intPartOfFrac;
+                fracTarget.append(intPartOfFracStr);
+            }
+
+            System.out.print(fracTarget.toString());
         }
     }
 }
